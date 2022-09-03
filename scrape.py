@@ -1,13 +1,14 @@
 from bs4 import BeautifulSoup
 import requests
+import json
 
 # Constants
-URL = "https://www.rit.edu/fa/diningservices/"
+URL = "https://pastebin.com/raw/ukySxbAY"
 page = requests.get(URL)
 soup = BeautifulSoup(page.content, "html.parser")
 
 """
-Function that pulls the 
+Function that pulls the visiting chef data.
 """
 def pull_data():
     results = soup.find("div", class_="col-xs-12 col-md-6 visitingchef-content")
@@ -27,16 +28,20 @@ def pull_data():
         locations.append(location_block)
         #print(location_block.prettify())
 
-    chef_location = [];
+    chef_location = { };
     for i in range(len(chefs)):
         chef = chefs[i]
         location = locations[i]
-        chef_location.append((chef.text.strip(), location.text.strip()))
+        chef_location[chef.text.strip()] = location.text.strip();
+        #chef_location.append((chef.text.strip(), location.text.strip()))
 
     return chef_location
 
 def main():
-    return pull_data()
+    chef_location_json = json.dumps(pull_data());
+    print(chef_location_json);
+
+    return chef_location_json;
 
 if __name__ == "__main__":
     main();

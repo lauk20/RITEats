@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 require('dotenv').config();
 const token = process.env.DISCORD_TOKEN;
 
@@ -9,7 +9,8 @@ const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
 const cron = require("cron");
-const { exec } = require('child_process');
+const util = require("util");
+const exec = require('child_process').execSync;
 
 // Create a new client instance
 const client = new Client({ 
@@ -23,6 +24,7 @@ const client = new Client({
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
 	console.log('Ready!');
+    scrape();
 });
 
 for (const file of eventFiles) {
@@ -38,12 +40,15 @@ for (const file of eventFiles) {
 const execute = () => {
     const data = fs.readFileSync(__dirname + '/data/data.json', { endoding: 'utf8'})
     const obj = JSON.parse(data)
-    
+
+    const file = new AttachmentBuilder('./assets/riteatslogo.png');
     client.channels.cache.filter((channel) => channel.name === "visiting-chef").forEach(channel => {
         let embed = new EmbedBuilder()
             .setColor("FFC733")
             .setTitle("Today's Visiting Chefs")
+            .setAuthor({ name: 'RIT Eats', iconURL: 'attachment://riteatslogo.png' })
             .setDescription("Here are today's visiting chefs")
+            .setThumbnail("attachment://riteatslogo.png")
         
         Object.entries(obj).forEach(entry => {
             const [key, value] = entry;
@@ -52,12 +57,12 @@ const execute = () => {
             )
         })
         embed.setTimestamp()
-        channel.send({ embeds: [embed]});
+        channel.send({ embeds: [embed], files: [file] });
     })
 }
 
-const scrape = () => {
-    exec("python scrape.py", (error, stdout, stderr) => {
+const scrape = async () => {
+    await exec("python scrape.py", (error, stdout, stderr) => {
         if (error !== null) {
             console.log(error)
         }

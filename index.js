@@ -21,7 +21,6 @@ const client = new Client({
     ] 
 });
 
-/* Originally for handling the !rit command during initial bot testing
 for (const file of eventFiles) {
 	const filePath = path.join(eventsPath, file);
 	const event = require(filePath);
@@ -31,7 +30,6 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
-*/
 
 const execute = () => {
     const data = fs.readFileSync(__dirname + '/data/data.json', { endoding: 'utf8'})

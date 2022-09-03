@@ -11,22 +11,22 @@ soup = BeautifulSoup(page.content, "html.parser")
 Function that pulls the visiting chef data.
 """
 def pull_data():
-    results = soup.find("div", class_="col-xs-12 col-md-6 visitingchef-content")
+    results = soup.find_all("div", class_="col-xs-12 col-md-6 visitingchef-content")
     #print(results.prettify())
-
-    chef_blocks = results.find_all("div", class_="visitingchef-event")
-    location_blocks = results.find_all("div", class_="visitingchef-location")
 
     chefs = [];
     locations = [];
+    for res in results:
+        chef_blocks = res.find_all("div", class_="visitingchef-event")
+        location_blocks = res.find_all("div", class_="visitingchef-location")
 
-    for chef_block in chef_blocks:
-        chefs.append(chef_block)
-        #print(chef_block.prettify())
+        for chef_block in chef_blocks:
+            chefs.append(chef_block)
+            #print(chef_block.prettify())
 
-    for location_block in location_blocks:
-        locations.append(location_block)
-        #print(location_block.prettify())
+        for location_block in location_blocks:
+            locations.append(location_block)
+            #print(location_block.prettify())
 
     chef_location = { };
     for i in range(len(chefs)):

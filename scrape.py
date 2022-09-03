@@ -3,7 +3,7 @@ import requests
 import json
 
 # Constants
-URL = "https://pastebin.com/raw/ukySxbAY"
+URL = ""
 page = requests.get(URL)
 soup = BeautifulSoup(page.content, "html.parser")
 
@@ -38,10 +38,9 @@ def pull_data():
     return chef_location
 
 def main():
-    chef_location_json = json.dumps(pull_data());
-    print(chef_location_json);
-
-    return chef_location_json;
+    #print(chef_location_json);
+    with open("./data/data.json", "w") as f:
+        json.dump(pull_data(), f)
 
 if __name__ == "__main__":
     main();

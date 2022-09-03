@@ -1,7 +1,15 @@
+const fs = require('fs');
+var obj;
+fs.readFile('data/data.json', 'utf8', function (err, data) {
+  if (err) throw err;
+  obj = JSON.parse(data);
+});
+
 module.exports = {
     name: "messageCreate",
     execute({content}) {
-        console.log(content);
-        console.log("Message received");
+        if (content.startsWith("!rit")) {
+            console.log(obj);
+        }
     }
 }

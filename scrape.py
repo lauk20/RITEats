@@ -3,7 +3,7 @@ import requests
 import json
 
 # Constants
-URL = ""
+URL = "https://www.rit.edu/fa/diningservices/"
 page = requests.get(URL)
 soup = BeautifulSoup(page.content, "html.parser")
 

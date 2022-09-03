@@ -21,12 +21,7 @@ const client = new Client({
     ] 
 });
 
-// When the client is ready, run this code (only once)
-client.once('ready', () => {
-	console.log('Ready!');
-    scrape();
-});
-
+/* Originally for handling the !rit command during initial bot testing
 for (const file of eventFiles) {
 	const filePath = path.join(eventsPath, file);
 	const event = require(filePath);
@@ -36,6 +31,7 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+*/
 
 const execute = () => {
     const data = fs.readFileSync(__dirname + '/data/data.json', { endoding: 'utf8'})
@@ -72,6 +68,13 @@ const scrape = async () => {
 
 const scheduledMessage = new cron.CronJob("00 00 08 * * *", scrape)
 scheduledMessage.start();
+
+// When the client is ready, run this code (only once)
+// Bot will scrape and send to server upon every startup of bot
+client.once('ready', () => {
+	console.log('Ready!');
+    scrape();
+});
 
 // Login to Discord with your client's token
 client.login(token);

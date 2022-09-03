@@ -2,6 +2,7 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 require('dotenv').config();
 const token = process.env.DISCORD_TOKEN;
+
 const path = require("path");
 const fs = require("fs");
 const eventsPath = path.join(__dirname, 'events');
@@ -22,7 +23,6 @@ client.once('ready', () => {
 });
 
 for (const file of eventFiles) {
-    console.log("hi")
 	const filePath = path.join(eventsPath, file);
 	const event = require(filePath);
 	if (event.once) {
